@@ -117,3 +117,64 @@ Dashboard.html
 </body>
 </html>
 ------------------------------------------------------------------
+<div class="mb-3">
+    <label for="fatherName" class="form-label">Father's Name</label>
+    <input type="text" class="form-control" id="fatherName" name="fatherName">
+</div>
+<div class="mb-3">
+    <label for="motherName" class="form-label">Mother's Name</label>
+    <input type="text" class="form-control" id="motherName" name="motherName">
+</div>
+<div class="mb-3">
+    <label for="age" class="form-label">Age</label>
+    <input type="number" class="form-control" id="age" name="age">
+</div>
+--------------------------------------------------------------
+<!DOCTYPE html>
+<html>
+<head>
+    <title>All Students</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-4">
+    <h2>All Registered Students</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th><th>Class</th><th>School</th><th>Marks</th><th>Grade</th><th>Promoted</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="student : ${students}">
+                <td th:text="${student.name}"></td>
+                <td th:text="${student.className}"></td>
+                <td th:text="${student.school}"></td>
+                <td th:text="${student.marks}"></td>
+                <td th:text="${student.grade}"></td>
+                <td th:text="${student.promoted ? 'Yes' : 'No'}"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
+------------------------------------------------------------------------
+@NotBlank
+private String name;
+
+@Min(5)
+@Max(100)
+private int age;
+--------------------------------------
+@PostMapping("/submit")
+public String submitForm(@Valid @ModelAttribute Student student, BindingResult result, Model model) {
+    if (result.hasErrors()) {
+        return "index";
+    }
+    studentService.saveStudent(student);
+    model.addAttribute("student", student);
+    return "dashboard";
+}
+
+
